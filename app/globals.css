@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Google Font Poppins will be loaded in layout head */
+:root{
+  --school-green: #0b5b3b;
+  --school-cream: #fff7e6;
+  --accent: #ffd35a;
+}
+body { 
+  background: linear-gradient(180deg, #f7fbf9 0%, #fbfcff 100%);
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.header-school {
+  background: linear-gradient(90deg, var(--school-green), #137f5a);
+}
+.card-school {
+  background: linear-gradient(180deg, #ffffff, var(--school-cream));
+  border: 1px solid rgba(11,91,59,0.06);
+  box-shadow: 0 6px 18px rgba(11,91,59,0.06);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card-school:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(11,91,59,0.09);
+}
+.logo-img { width:48px; height:48px; border-radius:8px; }
+
+/* subtle fade-in for pages */
+.fade-in { animation: fadeIn .32s ease both; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* print styles */
+@media print {
+  header, nav, .no-print { display: none !important; }
+  body { background: white; color: black; }
+  .card-school { box-shadow: none; border: none; background: white; }
+}
