@@ -42,7 +42,7 @@ export default function Layout({children}:{children:React.ReactNode}) {
         </div>
       </header>
       <main className='max-w-6xl mx-auto p-6'>{children}</main>
-      <footer className='max-w-6xl mx-auto p-4 text-xs text-center no-print'>
+      <footer className='absolute bottom-0 left-0 right-0  max-w-6xl mx-auto p-4 text-xs text-center no-print'>
         © {new Date().getFullYear()} EduWeb — Demo Sekolah
       </footer>
     </div>
