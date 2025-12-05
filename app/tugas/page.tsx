@@ -4,16 +4,36 @@ import Link from 'next/link'
 import { db } from '../../lib/storage'
 import { useRouter } from 'next/navigation'
 
-
 export default function TugasPage(){
   const router = useRouter()
   const [tugas, setTugas] = useState<any[]>([])
+  const [submittedMap, setSubmittedMap] = useState<Record<string, boolean>>({})
 
-  useEffect(()=>{ db.initIfEmpty(); setTugas(db.getTugas()); 
+  useEffect(()=>{ 
+    db.initIfEmpty(); 
+    setTugas(db.getTugas()); 
+
     const session = db.getSession()
     if(!session) return router.push('/login')
   },[])
-  
+
+  useEffect(() => {
+    const session = db.getSession()
+    if (!session) return;
+
+    const subs = db.getSubmissions()
+    const map: Record<string, boolean> = {}
+
+    tugas.forEach(x => {
+      const exist = subs.find(
+        (s: any) => s.userId === session.userId && s.itemId === x.id && s.type === 'tugas'
+      )
+      if (exist) map[x.id] = true
+    })
+
+    setSubmittedMap(map)
+  }, [tugas])
+
   return (
     <div>
       <h2 className='text-xl font-bold mb-4'>Tugas</h2>
@@ -21,19 +41,31 @@ export default function TugasPage(){
         <div>
           <h3 className='font-semibold'>Daftar Tugas</h3>
           <ul>
-            {tugas.map(t=> <li key={t.id} className='p-2 border rounded mb-2 card-school'>
-              <div className='flex justify-between items-center'>
-                <div>
-                  <div className='font-semibold'>{t.title}</div>
-                  <div className='text-xs'>Mapel: {t.mapelId}</div>
+            {tugas.map(t=> (
+              <li key={t.id} className='p-2 border rounded mb-2 card-school'>
+                <div className='flex justify-between items-center'>
+                  <div>
+                    <div className='font-semibold'>{t.title}</div>
+                    <div className='text-xs'>Mapel: {t.mapelId}</div>
+                    {submittedMap[t.id] && (
+                      <div className="text-green-600 text-xs font-semibold">
+                        ✔ Sudah dikerjakan
+                      </div>
+                    )}
+                  </div>
+                  {submittedMap[t.id] ? ( '' ) : (
+                    <Link href={'/tugas/' + t.id}  className='px-3 py-1 bg-amber-400 rounded'> Kerjakan </Link>
+                  )}
                 </div>
-                <Link href={'/tugas/' + t.id} className='px-3 py-1 bg-amber-400 rounded'>Kerjakan</Link>
-              </div>
-            </li>)}
+              </li>
+            ))}
           </ul>
         </div>
+
         <div>
-          <div className='text-sm opacity-80'>Pilih tugas dan klik "Kerjakan" untuk membuka halaman tugas pada halaman baru.</div>
+          <div className='text-sm opacity-80'>
+            Pilih tugas dan klik "Kerjakan" untuk membuka halaman tugas pada halaman baru.
+          </div>
         </div>
       </div>
     </div>
