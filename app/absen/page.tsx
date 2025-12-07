@@ -13,48 +13,50 @@ export default function AbsenPage() {
   const [date, setDate] = useState(today)
   const [records, setRecords] = useState<AbsenRecord[]>([])
   const [submitted, setSubmitted] = useState(false)
-  const [kode, setKode] = useState('') // untuk murid
-  const [selectedUser, setSelectedUser] = useState<string>('') // untuk admin
+  const [kode, setKode] = useState('') 
+  const [selectedUser, setSelectedUser] = useState<string>('') 
   const [status, setStatus] = useState<'Hadir'|'Izin'|'Sakit'|'Alpha'>('Hadir')
   const [selectedMonth, setSelectedMonth] = useState(today.slice(0,7))
   const [session, setSession] = useState<any>(null)
 
-  useEffect(()=>{
+  useEffect(()=> {
     db.initIfEmpty()
     const sess = db.getSession()
-    if(!sess) return router.push('/login')
+    if (!sess) return router.push('/login')
     setSession(sess)
-    if(sess.role !== 'admin') {
+
+    if (sess.role !== 'admin') {
       // murid
-      const exists = db.getAbsen().some(r=> r.userId===sess.userId && r.date===today)
+      const exists = db.getAbsen().some(r => r.userId === sess.id && r.date === today)
       setSubmitted(Boolean(exists))
-      setRecords(db.getAbsenByUser(sess.userId))
+      setRecords(db.getAbsenByUser(sess.id))
     } else {
       // admin
       setRecords(db.getAbsen())
     }
-  },[])
+  }, [])
 
   function save() {
-    if(!session) return alert('Login dulu')
+    if (!session) return alert('Login dulu')
 
-    if(session.role !== 'admin') {
+    if (session.role !== 'admin') {
       // murid
-      if(!kode) return alert('Masukkan kode absen dari guru')
-      if(kode !== ABSEN_KODE) return alert('Kode absen salah!')
+      if (!kode) return alert('Masukkan kode absen dari guru')
+      if (kode !== ABSEN_KODE) return alert('Kode absen salah!')
 
-      const exists = db.getAbsen().some(r=> r.userId===session.userId && r.date===today)
-      if(exists) return alert('Anda sudah absen hari ini')
+      const exists = db.getAbsen().some(r => r.userId === session.id && r.date === today)
+      if (exists) return alert('Anda sudah absen hari ini')
 
-      db.saveAbsen({ userId: session.userId, date: today, status: 'Hadir' })
+      db.saveAbsen({ userId: session.id, date: today, status: 'Hadir' })
       setSubmitted(true)
-      setRecords(db.getAbsenByUser(session.userId))
+      setRecords(db.getAbsenByUser(session.id))
       alert('Absen berhasil')
+
     } else {
       // admin
-      if(!selectedUser) return alert('Pilih user')
-      const exists = db.getAbsen().some(r=> r.userId===selectedUser && r.date===date)
-      if(exists) return alert('User ini sudah absen pada tanggal tersebut')
+      if (!selectedUser) return alert('Pilih user')
+      const exists = db.getAbsen().some(r => r.userId === selectedUser && r.date === date)
+      if (exists) return alert('User ini sudah absen pada tanggal tersebut')
 
       db.saveAbsen({ userId: selectedUser, date, status })
       setRecords(db.getAbsen())
@@ -84,7 +86,9 @@ export default function AbsenPage() {
             <div className='mb-3'>
               <label className='block text-sm'>Pilih User</label>
               <select value={selectedUser} onChange={e=>setSelectedUser(e.target.value)} className='border p-2 rounded w-full'>
-                {db.getUsers().map(u=> <option key={u.userId} value={u.userId}>{u.name}</option>)}
+                {db.getUsers().map(u => (
+                  <option key={u.id} value={u.id}>{u.name}</option>
+                ))}
               </select>
             </div>
             <div className='mb-3'>
@@ -111,7 +115,11 @@ export default function AbsenPage() {
             <input type='month' value={selectedMonth} onChange={e=>setSelectedMonth(e.target.value)} className='border p-1 rounded'/>
           </div>
           <ul>
-            {filteredRecords.map(r => <li key={r.userId + r.date}>{r.date} — {r.status}</li>)}
+            {filteredRecords.map(r => (
+              <li key={r.userId + r.date}>
+                {r.date} — {r.status}
+              </li>
+            ))}
           </ul>
         </div>
 

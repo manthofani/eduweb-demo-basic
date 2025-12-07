@@ -10,7 +10,7 @@ export interface ImageItem {
 export interface OptionItem {
   id: string
   label: string
-  assignedImage?: ImageItem
+  assignedImage?: ImageItem | null
 }
 
 export interface QuestionItem {
