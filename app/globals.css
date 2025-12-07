@@ -42,3 +42,23 @@ body {
   body { background: white; color: black; }
   .card-school { box-shadow: none; border: none; background: white; }
 }
+
+.slide-enter {
+  opacity: 0;
+  transform: translateX(40px);
+}
+.slide-enter-active {
+  opacity: 1;
+  transform: translateX(0px);
+  transition: all 300ms ease;
+}
+
+.slide-exit {
+  opacity: 1;
+  transform: translateX(0px);
+}
+.slide-exit-active {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: all 300ms ease;
+}

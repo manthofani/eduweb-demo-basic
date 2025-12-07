@@ -1,13 +1,14 @@
 import type { MCQ, Submission, Tugas, Ujian } from './types'
 
-export function gradeMCQ(questions: MCQ[], answers: number[]): { score:number; perQuestion:boolean[] } {
-  let total = 0
-  const perQuestion = questions.map((q, idx) => {
-    const ok = answers[idx] === q.answerIndex
-    if (ok) total += q.score
-    return ok
-  })
-  return { score: total, perQuestion }
+export function gradeMCQ(questions: MCQ[], answers: number[]): { score: number; perQuestion: boolean[] } {
+  const perQuestion = questions.map((q, idx) => answers[idx] === q.answerIndex)
+  const correctCount = perQuestion.filter(v => v).length
+  const totalQuestions = questions.length
+
+  // hitung score 100 skala
+  const score = Math.round((correctCount / totalQuestions) * 100)
+
+  return { score, perQuestion }
 }
 
 export function calcMapelScore(mapelId: string, tugas: Tugas[], ujians: Ujian[], subs: Submission[], userId?: string) {

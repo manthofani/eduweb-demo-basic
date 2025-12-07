@@ -1,6 +1,5 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Analytics } from '@vercel/analytics/next'
 import Layout from '../components/Layout'
 
 export const metadata: Metadata = {
@@ -20,7 +19,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Layout>
           <div className='fade-in'>{children}</div>
         </Layout>
-        <Analytics />
       </body>
     </html>
   )

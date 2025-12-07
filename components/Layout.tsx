@@ -17,9 +17,9 @@ export default function Layout({children}:{children:React.ReactNode}) {
     window.location.href = '/login'
   }
   return (
-    <div className='min-h-screen text-gray-900'>
+    <div className='"@container" min-h-screen text-gray-900'>
       <header className='header-school text-white'>
-        <div className='max-w-6xl mx-auto p-4 flex justify-between items-center'>
+        <div className='max-w-6xl mx-auto p-4  justify-between items-center flex  @min-[875px]:block'>
           <div className='flex items-center gap-3'>
             <Image src='/logo.png' alt='Logo Sekolah' width={48} height={48} className='logo-img' />
             <div>
@@ -36,15 +36,16 @@ export default function Layout({children}:{children:React.ReactNode}) {
             <Link href='/rapor' className='hover:underline'>Rapor</Link>
             <Link href='/modul' className='hover:underline'>Modul</Link>
             <Link href='/murid' className='hover:underline'>Data Murid</Link>
+            <Link href='/tugas-manager/upload' className='hover:underline'>Tugas Manager</Link>
             <Link href='/profile' className='hover:underline'>Profil</Link>
             
           </nav>
         </div>
       </header>
       <main className='max-w-6xl mx-auto p-6'>{children}</main>
-      <footer className='absolute bottom-0 left-0 right-0  max-w-6xl mx-auto p-4 text-xs text-center no-print'>
+      {/* <footer className='absolute bottom-0 left-0 right-0 max-w-6xl mx-auto p-4 text-xs text-center no-print'>
         © {new Date().getFullYear()} EduWeb — Demo Sekolah
-      </footer>
+      </footer> */}
     </div>
   )
 }
